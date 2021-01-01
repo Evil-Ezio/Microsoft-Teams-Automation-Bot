@@ -16,3 +16,13 @@ for more contact me :
  21102000sskekan@gmail.com
 
 
+How to Use steps:
+### Its is recommended to use cloud computer
+1) Install python latest verion
+2) Install Google chrome on desktop
+3) open cmd and run "pip install selenium"
+4) go to directory and open bot.py using text editor add your credentials in CREDS dictionary
+5) open cmd and navigate to "teams bot" directory
+6) Once in a directory run "python bot.py"
+
+## Your bot is deployed!!!
