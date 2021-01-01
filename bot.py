@@ -58,3 +58,35 @@ def meet_runtime(end_time):
     t1=((int(end_time.split(":")[0])*60)+(int(end_time.split(":")[1])))*60
     t2=(datetime.now().hour*60+datetime.now().minute)*60
     return t2-t1
+def join_meeting():
+	while True:
+		if check_exists_by_xpath('//*[@aria-label="Join meeting"]'):
+			driver.find_element_by_xpath('//*[@aria-label="Join meeting"]').click()
+			time.sleep(5)
+			if check_exists_by_xpath('//*[@telemetry-summary="Toggle camera OFF in meeting pre join screen"]'):
+				driver.find_element_by_xpath('//*[@telemetry-summary="Toggle camera OFF in meeting pre join screen"]').click()
+				print("Turned Off Camera")
+				time.sleep(2)
+			if check_exists_by_xpath('//toggle-button[@telemetry-summary="Toggle microphone OFF in meeting pre join screen"]'):
+				driver.find_element_by_xpath('//toggle-button[@telemetry-summary="Toggle microphone OFF in meeting pre join screen"]').click()
+				print("Turned off Microphone")
+				time.sleep(2)
+			driver.find_element_by_xpath('//*[@aria-label="Join the meeting"]').click()
+			print("Currently In Meeting")
+			time.sleep(5)
+			driver.find_element_by_xpath('//*[@id="app-bar-ef56c0de-36fc-4ef8-b417-3d82ba9d073c"]').click()
+			time.sleep(5)
+			on_going_meeting=driver.find_element_by_xpath('//*[@class="node_modules--msteams-bridges-components-calendar-event-card-dist-es-src-renderers-event-card-renderer-event-card-renderer__eventCard--h5y4X node_modules--msteams-bridges-components-calendar-event-card-dist-es-src-renderers-event-card-renderer-event-card-renderer__activeCall--25Ch-"]')
+			att=on_going_meeting.get_attribute('aria-label')
+			end_time=get_end_time(att)
+			runtime=meet_runtime(end_time)
+			if(runtime<=0):
+				driver.find_element_by_xpath('//*[@id="hangup-button"]').click()
+			else:
+				time.sleep(runtime)
+				driver.find_element_by_xpath('//*[@id="hangup-button"]').click()
+				time.sleep(5)
+			driver.refresh()
+		else:
+			driver.refresh()
+			time.sleep(30)
