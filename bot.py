@@ -90,3 +90,57 @@ def join_meeting():
 		else:
 			driver.refresh()
 			time.sleep(30)
+def find_meeting():
+	WebDriverWait(driver,10000).until(EC.visibility_of_element_located((By.XPATH,
+	'//button[@class="ms-Button ms-Button--commandBar ms-Button--hasMenu ms-CommandBarItem-link node_modules--msteams-bridges-components-calendar-grid-dist-es-src-renderers-calendar-top-bar-renderer-calendar-top-bar-renderer__topBarContent--2xlZu root-55"]'
+	)))
+	driver.find_element_by_xpath('//button[@class="ms-Button ms-Button--commandBar ms-Button--hasMenu ms-CommandBarItem-link node_modules--msteams-bridges-components-calendar-grid-dist-es-src-renderers-calendar-top-bar-renderer-calendar-top-bar-renderer__topBarContent--2xlZu root-55"]').click()
+	WebDriverWait(driver,10000).until(EC.visibility_of_element_located((By.XPATH,
+	'//*[@aria-label="Day view"]'
+	)))
+	driver.find_element_by_xpath('//*[@aria-label="Day view"]').click()
+	driver.refresh()
+	WebDriverWait(driver,10000).until(EC.visibility_of_element_located((By.TAG_NAME,'body')))
+	join_meeting()
+
+def go_to_calendar():
+    WebDriverWait(driver,10000).until(EC.visibility_of_element_located((By.XPATH,
+    '//*[@apps-drag-data-id="ef56c0de-36fc-4ef8-b417-3d82ba9d073c"]')))
+    driver.find_element_by_xpath('//*[@apps-drag-data-id="ef56c0de-36fc-4ef8-b417-3d82ba9d073c"]').click()
+    find_meeting()
+    
+def login():
+	global driver
+	print("logging in")
+	emailField = driver.find_element_by_xpath('//*[@id="i0116"]')
+	emailField.click()
+	emailField.send_keys(CREDS['email'])
+	driver.find_element_by_xpath('//*[@id="idSIButton9"]').click() 
+	time.sleep(5)
+	passwordField = driver.find_element_by_xpath('//*[@id="i0118"]')
+	passwordField.click()
+	passwordField.send_keys(CREDS['passwd'])
+	driver.find_element_by_xpath('//*[@id="idSIButton9"]').click() 
+	time.sleep(5)
+	driver.find_element_by_xpath('//*[@id="idSIButton9"]').click() 
+	go_to_calendar()
+
+def start_browser():
+	global driver
+	driver = webdriver.Chrome(chrome_options=opt,service_log_path='NUL')
+	driver.get(URL)
+	WebDriverWait(driver,10000).until(EC.visibility_of_element_located((By.TAG_NAME,'body')))
+	if("login.microsoftonline.com" in driver.current_url):
+		login()
+
+def Bot():
+	print('Press "Ctrl+C" to Quit')
+	start_browser()
+
+
+if __name__=="__main__":
+	op = input(("Enter y to start bot:"))
+	if (op=='Y' or op=='y') :
+		Bot()
+	elif (op=='N'or op=='n'):
+		pass
