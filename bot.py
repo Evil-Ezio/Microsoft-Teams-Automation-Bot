@@ -46,3 +46,15 @@ def convert24(str1):
         return str1[:-2] 
     else: 
         return str(int(str1[:2]) + 12) + str1[2:6] 
+def get_end_time(text):
+    a=text.split(",")
+    temp=a[-2].split()
+    f2=temp[8]
+    end_time=temp[2]+' '+f2
+    return convert24(end_time)
+
+def meet_runtime(end_time):
+    datetime.now().minute
+    t1=((int(end_time.split(":")[0])*60)+(int(end_time.split(":")[1])))*60
+    t2=(datetime.now().hour*60+datetime.now().minute)*60
+    return t2-t1
